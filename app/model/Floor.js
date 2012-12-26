@@ -1,4 +1,5 @@
 var FloorRow = require('./FloorRow.js');
+var Dictionary = require('../../lib/Dictionary.js');
 
 var FloorSizes = {
     tiny: 40,
@@ -6,6 +7,10 @@ var FloorSizes = {
     medium: 60,
     large: 70,
     huge: 80
+};
+
+var _getKeyFromPosition = function(x, y) {
+    return x + '-' + y;
 };
 
 var Floor = function(floorSizeType) {
@@ -34,6 +39,7 @@ p.init = function(width, height) {
     this.height = height;
 
     this.tileRows = [];
+    this.entities = new Dictionary();
     return this.populateFloor();
 };
 
@@ -50,6 +56,25 @@ p.populateFloor = function() {
     }
 
     return this;
+};
+
+p.getTileFromPosition = function(x, y) {
+    // TODO: Insert error checking
+
+    var row = this.tileRows[y];
+    return row.getTileFromIndex(x);
+};
+
+p.isPositionOpen = function(x, y) {
+    var tile = this.getTileFromPosition(x, y);
+
+    return tile.isValid;
+};
+
+p.placeEntity = function(entity, x, y) {
+    var key = _getKeyFromPosition(x, y);
+
+    this.entities.addKeyValue(key, entity);
 };
 
 p.toString = function() {

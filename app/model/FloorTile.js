@@ -37,6 +37,18 @@ p.init = function(symbol, depth) {
     this.symbol = symbol;
     this.depth = depth;
 
+    var isValid = false;
+    switch (symbol) {
+        case ' ':
+            isValid = false;
+            break;
+        case '-':
+            isValid = true;
+            break;
+    }
+
+    this.isValid = isValid;
+
     this.x = INVALID_POSITION;
     this.y = INVALID_POSITION;
 

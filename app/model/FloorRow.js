@@ -42,6 +42,11 @@ p.populateEmpty = function() {
     return this;
 };
 
+p.getTileFromIndex = function(index) {
+    // TODO: Add error checking
+    return this.tiles[index];
+}
+
 p.insertTileIntoIndex = function(tile, index) {
     if (!tile instanceof FloorTile) {
         throw new Error('TypeError: tile must be of type FloorType');
