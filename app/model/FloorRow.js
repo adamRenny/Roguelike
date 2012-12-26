@@ -43,7 +43,16 @@ p.populateEmpty = function() {
 };
 
 p.getTileFromIndex = function(index) {
-    // TODO: Add error checking
+    if (typeof index !== 'number') {
+        throw new Error('TypeError: index must be of type number');
+    }
+
+    if (index < 0 || index >= this.numberOfTiles) {
+        throw new Error(
+            'BoundsError: index must be within the size of the row: ' + index + ' of ' + this.numberOfTiles
+        );
+    }
+
     return this.tiles[index];
 }
 
