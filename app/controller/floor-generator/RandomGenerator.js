@@ -1,7 +1,5 @@
 var FloorTile = require('../../model/FloorTile.js');
 
-var NUMBER_OF_TYPES = 2;
-
 var RandomGenerator = {
     getSymbolForPosition: function(x, y) {
         var randomValue = Math.random() * 5;

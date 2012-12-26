@@ -52,7 +52,9 @@ p.insertTileIntoIndex = function(tile, index) {
     }
 
     if (index < 0 || index >= this.numberOfTiles) {
-        throw new Error('BoundsError: index must be within the size of the row: ' + index + ' of ' + this.numberOfTiles);
+        throw new Error(
+            'BoundsError: index must be within the size of the row: ' + index + ' of ' + this.numberOfTiles
+        );
     }
 
     this.tiles[index] = tile;

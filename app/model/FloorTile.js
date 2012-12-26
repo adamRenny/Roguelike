@@ -23,7 +23,7 @@ var _getDepthValue = function(depth) {
     }
 
     return depth;
-}
+};
 
 var FloorTile = function(tileType, depth) {
     var symbol = _getTileSymbol(tileType);

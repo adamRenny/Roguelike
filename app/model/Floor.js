@@ -24,7 +24,7 @@ p.width = 0;
 p.height = 0;
 
 p.init = function(width, height) {
-    if (typeof width !== 'number' || typeof height !== 'number' 
+    if (typeof width !== 'number' || typeof height !== 'number'
         || width === 0 || height === 0
     ) {
         throw new Error('TypeError: Valid floor sizes not supplied: ' + width + ', ' + height);
