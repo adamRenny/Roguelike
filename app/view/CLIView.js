@@ -1,4 +1,4 @@
-var Floor = require('../model/Floor.js');
+var Floor = require('../model/Floor');
 
 var CLIView = function(floor) {
     if (!(floor instanceof Floor) || floor === undefined) {
@@ -8,17 +8,16 @@ var CLIView = function(floor) {
     this.init(floor);
 };
 
-var p = CLIView.prototype;
-p.init = function(floor) {
+CLIView.prototype.init = function(floor) {
     this.floor = floor;
 
     return this;
 };
 
-p.render = function() {
+CLIView.prototype.render = function() {
     console.log(this.floor.toString());
 
     return this;
-}
+};
 
 module.exports = CLIView;

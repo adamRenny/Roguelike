@@ -1,26 +1,24 @@
-var FloorPosition = require('./FloorPosition.js');
+var FloorPosition = require('./FloorPosition');
 
 var Entity = function(symbol) {
     this.init(symbol);
 };
 
-var p = Entity.prototype;
-
-p.init = function(symbol) {
+Entity.prototype.init = function(symbol) {
     this.symbol = symbol;
     this.position = new FloorPosition(-1, -1);
 
     return this;
 };
 
-p.setPosition = function(x, y) {
+Entity.prototype.setPosition = function(x, y) {
     this.position.x = x;
     this.position.y = y;
 
     return this;
 }
 
-p.toString = function() {
+Entity.prototype.toString = function() {
     return this.symbol;
 };
 

@@ -1,4 +1,4 @@
-var FloorTile = require('../../model/FloorTile.js');
+var FloorTile = require('../../model/FloorTile');
 
 var RandomGenerator = {
     getSymbolForPosition: function(x, y) {

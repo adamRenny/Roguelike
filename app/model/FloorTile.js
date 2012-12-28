@@ -32,8 +32,7 @@ var FloorTile = function(tileType, depth) {
     this.init(symbol, depth);
 };
 
-var p = FloorTile.prototype;
-p.init = function(symbol, depth) {
+FloorTile.prototype.init = function(symbol, depth) {
     this.symbol = symbol;
     this.depth = depth;
 
@@ -55,14 +54,14 @@ p.init = function(symbol, depth) {
     return this;
 };
 
-p.setPosition = function(x, y) {
+FloorTile.prototype.setPosition = function(x, y) {
     this.x = x;
     this.y = y;
 
     return this;
 };
 
-p.updateTile = function(tileType, depth) {
+FloorTile.prototype.updateTile = function(tileType, depth) {
     var symbol = _getTileSymbol(tileType);
     depth = _getDepthValue(depth);
 
@@ -70,7 +69,7 @@ p.updateTile = function(tileType, depth) {
     this.depth = depth;
 };
 
-p.toString = function() {
+FloorTile.prototype.toString = function() {
     return this.symbol;
 };
 

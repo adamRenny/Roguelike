@@ -1,6 +1,6 @@
 var EventEmitter = require('events').EventEmitter;
 var util = require('util');
-var CommandMap = require('../model/CommandMap.js');
+var CommandMap = require('../model/CommandMap');
 
 var STREAM_ENCODING = 'utf8';
 
@@ -19,8 +19,7 @@ var InputHandler = function(stream) {
 
 util.inherits(InputHandler, EventEmitter);
 
-var p = InputHandler.prototype;
-p.init = function(stream) {
+InputHandler.prototype.init = function(stream) {
     InputHandler.super_.call(this);
     this.prepareStream(stream);
     this.stream = stream;
@@ -31,12 +30,12 @@ p.init = function(stream) {
     return this.setupHandlers().enable();
 };
 
-p.prepareStream = function(stream) {
+InputHandler.prototype.prepareStream = function(stream) {
     stream.setRawMode(true);
     stream.setEncoding(STREAM_ENCODING);
 };
 
-p.linkToStream = function() {
+InputHandler.prototype.linkToStream = function() {
     if (this.hasLinked) {
         this.stream.resume();
         return this;
@@ -49,7 +48,7 @@ p.linkToStream = function() {
     return this;
 };
 
-p.unlinkFromStream = function() {
+InputHandler.prototype.unlinkFromStream = function() {
     console.log('Unable to unlink from stream due to lack of `off` interface method');
 
     this.stream.pause();
@@ -57,13 +56,13 @@ p.unlinkFromStream = function() {
     return this;
 };
 
-p.setupHandlers = function() {
+InputHandler.prototype.setupHandlers = function() {
     this.onDataStreamHandler = this.onDataStream.bind(this);
 
     return this;
 };
 
-p.enable = function() {
+InputHandler.prototype.enable = function() {
     if (this.isEnabled) {
         return this;
     }
@@ -74,7 +73,7 @@ p.enable = function() {
     return this;
 };
 
-p.disable = function() {
+InputHandler.prototype.disable = function() {
     if (!this.isEnabled) {
         return this;
     }
@@ -85,14 +84,14 @@ p.disable = function() {
     return this;
 };
 
-p.destroy = function() {
+InputHandler.prototype.destroy = function() {
     this.disable();
     this.onDataStreamHandler = null;
 
     return this;
 };
 
-p.onDataStream = function(key) {
+InputHandler.prototype.onDataStream = function(key) {
     // console.log('DATA!', arguments);
     switch (key) {
 

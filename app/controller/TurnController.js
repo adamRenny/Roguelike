@@ -1,7 +1,7 @@
-var Floor = require('../model/Floor.js');
-var InputHandler = require('./InputHandler.js');
-var Entity = require('../model/Entity.js');
-var CommandMap = require('../model/CommandMap.js');
+var Floor = require('../model/Floor');
+var InputHandler = require('./InputHandler');
+var Entity = require('../model/Entity');
+var CommandMap = require('../model/CommandMap');
 
 var TurnController = function(floor, player, inputHandler) {
     if (!(floor instanceof Floor) || floor === undefined
@@ -16,8 +16,7 @@ var TurnController = function(floor, player, inputHandler) {
     this.init(floor, player, inputHandler);
 };
 
-var p = TurnController.prototype;
-p.init = function(floor, player, inputHandler) {
+TurnController.prototype.init = function(floor, player, inputHandler) {
     this.floor = floor;
     this.player = player;
     this.inputHandler = inputHandler;
@@ -27,13 +26,13 @@ p.init = function(floor, player, inputHandler) {
     return this.setupHandlers().enable();
 };
 
-p.setupHandlers = function() {
+TurnController.prototype.setupHandlers = function() {
     this.onPlayerActionHandler = this.onPlayerAction.bind(this);
 
     return this;
 };
 
-p.enable = function() {
+TurnController.prototype.enable = function() {
     if (this.isEnabled) {
         return this;
     }
@@ -44,7 +43,7 @@ p.enable = function() {
     return this;
 };
 
-p.disable = function() {
+TurnController.prototype.disable = function() {
     if (!this.isEnabled) {
         return this;
     }
@@ -55,14 +54,14 @@ p.disable = function() {
     return this;
 };
 
-p.destroy = function() {
+TurnController.prototype.destroy = function() {
     this.disable();
     this.onPlayerActionHandler = null;
 
     return this;
 };
 
-p.onPlayerAction = function(playerAction) {
+TurnController.prototype.onPlayerAction = function(playerAction) {
     var player = this.player;
     var x = player.position.x;
     var y = player.position.y;

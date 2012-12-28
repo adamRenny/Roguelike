@@ -1,6 +1,8 @@
-var FloorRow = require('./FloorRow.js');
-var FloorPosition = require('./FloorPosition.js');
-var Dictionary = require('../../lib/Dictionary.js');
+var FloorLayer = require('./FloorLayer');
+var RandomGenerator = require('../controller/floor-generator/RandomGenerator');
+var FloorPosition = require('./FloorPosition');
+var FloorTile = require('./FloorTile');
+var Dictionary = require('../../lib/Dictionary');
 
 var FloorSizes = {
     tiny: 40,
@@ -24,9 +26,7 @@ var Floor = function(floorSizeType) {
     this.init(floorSize, floorSize);
 };
 
-var p = Floor.prototype;
-
-p.init = function(width, height) {
+Floor.prototype.init = function(width, height) {
     if (typeof width !== 'number' || typeof height !== 'number'
         || width === 0 || height === 0
     ) {
@@ -38,13 +38,13 @@ p.init = function(width, height) {
 
     this.startPosition = null;
 
-    this.tileRows = [];
-    // console.log('init', this.tileRows);
+    this.tileLayer = new FloorLayer(width, height, FloorTile);
     this.entities = new Dictionary();
+    
     return this.populateFloor();
 };
 
-p.getStartPosition = function() {
+Floor.prototype.getStartPosition = function() {
     if (this.startPosition === null) {
         var hasFoundStart = false;
         var x = -1;
@@ -64,22 +64,26 @@ p.getStartPosition = function() {
     return this.startPosition;
 };
 
-p.populateFloor = function() {
-    var i = 0;
-    var length = this.height;
-    var tilesPerRow = this.width;
-    var rows = this.tileRows;
-    var row;
+Floor.prototype.populateFloor = function() {
+    var x = 0;
+    var y = 0;
+    var width = this.width;
+    var height = this.height;
+    var tileLayer = this.tileLayer;
+    var tileType;
 
-    for (; i < length; i++) {
-        row = new FloorRow(tilesPerRow, i);
-        rows[i] = row;
+    for (; x < width; x++) {
+        for (; y < height; y++) {
+            tileType = RandomGenerator.getSymbolForPosition(x, y);
+            tileLayer.setElement(new FloorTile(tileType, 0), x, y);
+        }
+        y = 0;
     }
 
     return this;
 };
 
-p.getTileAtPosition = function(x, y) {
+Floor.prototype.getTileAtPosition = function(x, y) {
     if (typeof x !== 'number' || typeof y !== 'number') {
         throw new Error('TypeError: x and y must be of type number, received ' + x + ', ' + y);
     }
@@ -96,15 +100,14 @@ p.getTileAtPosition = function(x, y) {
         );
     }
 
-    var row = this.tileRows[y];
-    return row.getTileFromIndex(x);
+    return this.tileLayer.getElement(x, y);
 };
 
-p.isOutOfBounds = function(x, y) {
+Floor.prototype.isOutOfBounds = function(x, y) {
     return x < 0 || x >= this.width || y < 0 || y >= this.height;
 };
 
-p.isPositionVacant = function(x, y) {
+Floor.prototype.isPositionVacant = function(x, y) {
     if (this.isOutOfBounds(x, y)) {
         return false;
     }
@@ -114,7 +117,7 @@ p.isPositionVacant = function(x, y) {
     return !this.entities.hasKey(key);
 };
 
-p.isPositionValid = function(x, y) {
+Floor.prototype.isPositionValid = function(x, y) {
     if (this.isOutOfBounds(x, y)) {
         return false;
     }
@@ -124,14 +127,14 @@ p.isPositionValid = function(x, y) {
     return tile.isValid;
 };
 
-p.placeEntity = function(entity, x, y) {
+Floor.prototype.placeEntity = function(entity, x, y) {
     var key = _getKeyForPosition(x, y);
 
     entity.setPosition(x, y);
     this.entities.addKeyValue(key, entity);
 };
 
-p.moveEntityToPosition = function(entity, x, y) {
+Floor.prototype.moveEntityToPosition = function(entity, x, y) {
     var oldKey = _getKeyForPosition(entity.position.x, entity.position.y);
     var key = _getKeyForPosition(x, y);
     entity.setPosition(x, y);
@@ -139,7 +142,7 @@ p.moveEntityToPosition = function(entity, x, y) {
     this.entities.addKeyValue(key, entity);
 };
 
-p.toString = function() {
+Floor.prototype.toString = function() {
     var x = 0;
     var y = 0;
     var width = this.width;

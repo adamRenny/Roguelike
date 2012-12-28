@@ -1,19 +1,18 @@
-var Floor = require('../model/Floor.js');
-var Entity = require('../model/Entity.js');
+var Floor = require('../model/Floor');
+var Entity = require('../model/Entity');
 
 var FloorBuilder = function() {
     this.init();
 };
 
-var p = FloorBuilder.prototype;
-p.init = function() {
+FloorBuilder.prototype.init = function() {
     this.floor = null;
     this.player = null;
 
     return this.createChildren();
 };
 
-p.createChildren = function() {
+FloorBuilder.prototype.createChildren = function() {
     this.floor = new Floor(Floor.FLOOR_SIZE_TINY);
 
     return this.createPlayer()
@@ -22,7 +21,7 @@ p.createChildren = function() {
                .createEntities();
 };
 
-p.createPlayer = function() {
+FloorBuilder.prototype.createPlayer = function() {
     var player = this.player = new Entity('@');
     var startPosition = this.floor.getStartPosition();
     this.floor.placeEntity(player, startPosition.x, startPosition.y);
@@ -30,15 +29,15 @@ p.createPlayer = function() {
     return this;
 };
 
-p.createObstacles = function() {
+FloorBuilder.prototype.createObstacles = function() {
     return this;
 };
 
-p.createSwag = function() {
+FloorBuilder.prototype.createSwag = function() {
     return this;
 };
 
-p.createEntities = function() {
+FloorBuilder.prototype.createEntities = function() {
     return this;
 };
 

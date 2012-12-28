@@ -1,14 +1,13 @@
-var FloorBuilder = require('./FloorBuilder.js');
-var TurnController = require('./TurnController.js');
-var CLIView = require('../view/CLIView.js');
-var InputHandler = require('./InputHandler.js');
+var FloorBuilder = require('./FloorBuilder');
+var TurnController = require('./TurnController');
+var CLIView = require('../view/CLIView');
+var InputHandler = require('./InputHandler');
 
 var GameController = function() {
     this.init();
 };
 
-var p = GameController.prototype;
-p.init = function() {
+GameController.prototype.init = function() {
     var floorBuilder = new FloorBuilder();
     this.view = new CLIView(floorBuilder.floor);
     this.inputHandler = new InputHandler(process.stdin);
@@ -20,14 +19,14 @@ p.init = function() {
     return this.setupHandlers().enable();
 };
 
-p.setupHandlers = function() {
+GameController.prototype.setupHandlers = function() {
     this.onPlayerActionHandler = this.onPlayerAction.bind(this);
     this.onGameQuitHandler = this.onGameQuit.bind(this);
 
     return this;
 };
 
-p.enable = function() {
+GameController.prototype.enable = function() {
     if (this.isEnabled) {
         return this;
     }
@@ -39,7 +38,7 @@ p.enable = function() {
     return this;
 };
 
-p.disable = function() {
+GameController.prototype.disable = function() {
     if (!this.isEnabled) {
         return this;
     }
@@ -51,7 +50,7 @@ p.disable = function() {
     return this;
 };
 
-p.destroy = function() {
+GameController.prototype.destroy = function() {
     this.inputHandler.disable().destroy();
     this.turnController.disable().destroy();
 
@@ -59,11 +58,11 @@ p.destroy = function() {
     this.onGameQuitHandler = null;
 };
 
-p.onPlayerAction = function(playerAction) {
+GameController.prototype.onPlayerAction = function(playerAction) {
     this.view.render();
 };
 
-p.onGameQuit = function() {
+GameController.prototype.onGameQuit = function() {
     this.destroy();
     process.exit();
 };
