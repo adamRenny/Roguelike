@@ -1,8 +1,13 @@
 var util = require('util');
+var Dictionary = require('../../lib/Dictionary');
 var TypeControl = require('../util/TypeControl');
 var ContentLayer = require('./ContentLayer');
 
-var FloorLayer = function(width, height, type) {
+var _getHashKey = function(x, y) {
+    return x + '-' + y;
+};
+
+var EntityLayer = function(width, height, type) {
     width = TypeControl.toNumberFromString(width);
     height = TypeControl.toNumberFromString(height);
 
@@ -13,38 +18,20 @@ var FloorLayer = function(width, height, type) {
     this.init(width, height, type);
 };
 
-util.inherits(FloorLayer, ContentLayer);
+util.inherits(EntityLayer, ContentLayer);
 
-FloorLayer.prototype.init = function(width, height, type) {
+EntityLayer.prototype.init = function(width, height, type) {
     this.width = width;
     this.height = height;
 
     this.type = type || null;
 
-    this.content = [];
-
-    return this.generateLayer();
-};
-
-FloorLayer.prototype.generateLayer = function() {
-    var x = 0;
-    var y = 0;
-    var width = this.width;
-    var height = this.height;
-    var content = this.content;
-
-    for (; x < width; x++) {
-        content[x] = [];
-        for (; y < height; y++) {
-            content[x][y] = null;
-        }
-        y = 0;
-    }
+    this.content = new Dictionary();
 
     return this;
 };
 
-FloorLayer.prototype.hasElement = function(x, y) {
+EntityLayer.prototype.hasElement = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -56,10 +43,12 @@ FloorLayer.prototype.hasElement = function(x, y) {
         throw new Error('BoundsError: x and y must be within the layer size');
     }
 
-    return true;
+    var key = _getHashKey(x, y);
+
+    return this.content.hasKey(key);
 };
 
-FloorLayer.prototype.getElement = function(x, y) {
+EntityLayer.prototype.getElement = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -71,10 +60,12 @@ FloorLayer.prototype.getElement = function(x, y) {
         throw new Error('BoundsError: x and y must be within the layer size');
     }
 
-    return this.content[x][y];
+    var key = _getHashKey(x, y);
+
+    return this.content.getValueForKey(key);
 };
 
-FloorLayer.prototype.setElement = function(element, x, y) {
+EntityLayer.prototype.setElement = function(x, y, element) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -90,32 +81,17 @@ FloorLayer.prototype.setElement = function(element, x, y) {
         throw new Error('TypeError: element must be of proper type');
     }
 
-    this.content[x][y] = element;
+    var key = _getHashKey(x, y);
+
+    if (this.content.hasKey(key)) {
+        this.content.removeKeyValueByKey(key);
+    }
+
+    if (element !== null) {
+        this.content.addKeyValue(key, element);
+    }
 
     return this;
 };
 
-FloorLayer.prototype.toString = function() {
-    var content = this.content;
-    var x = 0;
-    var y = 0;
-    var width = this.width;
-    var height = this.height;
-
-    var string = '';
-    var space = ' ';
-
-    for (; x < width; x++) {
-        for (; y < height; y++) {
-            if (y === height - 1) {
-                space = '\n';
-            }
-
-            string = string + content[x][y].toString() + space;
-        }
-        space = ' ';
-        y = 0;
-    }
-};
-
-module.exports = FloorLayer;
+module.exports = EntityLayer;

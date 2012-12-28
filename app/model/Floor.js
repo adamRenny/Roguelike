@@ -1,8 +1,9 @@
 var FloorLayer = require('./FloorLayer');
+var EntityLayer = require('./EntityLayer');
 var RandomGenerator = require('../controller/floor-generator/RandomGenerator');
 var FloorPosition = require('./FloorPosition');
 var FloorTile = require('./FloorTile');
-var Dictionary = require('../../lib/Dictionary');
+var Entity = require('./Entity');
 
 var FloorSizes = {
     tiny: 40,
@@ -10,10 +11,6 @@ var FloorSizes = {
     medium: 60,
     large: 70,
     huge: 80
-};
-
-var _getKeyForPosition = function(x, y) {
-    return x + '-' + y;
 };
 
 var Floor = function(floorSizeType) {
@@ -39,7 +36,7 @@ Floor.prototype.init = function(width, height) {
     this.startPosition = null;
 
     this.tileLayer = new FloorLayer(width, height, FloorTile);
-    this.entities = new Dictionary();
+    this.entityLayer = new EntityLayer(width, height, Entity);
     
     return this.populateFloor();
 };
@@ -111,10 +108,8 @@ Floor.prototype.isPositionVacant = function(x, y) {
     if (this.isOutOfBounds(x, y)) {
         return false;
     }
-    
-    var key = _getKeyForPosition(x, y);
 
-    return !this.entities.hasKey(key);
+    return !this.entityLayer.hasElement(x, y);
 };
 
 Floor.prototype.isPositionValid = function(x, y) {
@@ -128,18 +123,14 @@ Floor.prototype.isPositionValid = function(x, y) {
 };
 
 Floor.prototype.placeEntity = function(entity, x, y) {
-    var key = _getKeyForPosition(x, y);
-
     entity.setPosition(x, y);
-    this.entities.addKeyValue(key, entity);
+    this.entityLayer.setElement(x, y, entity);
 };
 
 Floor.prototype.moveEntityToPosition = function(entity, x, y) {
-    var oldKey = _getKeyForPosition(entity.position.x, entity.position.y);
-    var key = _getKeyForPosition(x, y);
+    this.entityLayer.setElement(entity.position.x, entity.position.y, null);
     entity.setPosition(x, y);
-    this.entities.removeKeyValueByKey(oldKey);
-    this.entities.addKeyValue(key, entity);
+    this.entityLayer.setElement(x, y, entity);
 };
 
 Floor.prototype.toString = function() {
@@ -164,7 +155,7 @@ Floor.prototype.toString = function() {
             tile = this.getTileAtPosition(x, y);
 
             if (this.isPositionValid(x, y) && !this.isPositionVacant(x, y)) {
-                entity = this.entities.getValueForKey(_getKeyForPosition(x, y));
+                entity = this.entityLayer.getElement(x, y);
             }
 
             if (x === width - 1) {
