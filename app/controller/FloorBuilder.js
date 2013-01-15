@@ -1,4 +1,4 @@
-var Floor = require('../model/Floor');
+var Floor = require('../model/floor/Floor');
 var EntityBuilder = require('../model/entity/EntityBuilder');
 
 var FloorBuilder = function() {

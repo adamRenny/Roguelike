@@ -8,11 +8,11 @@ var ContentLayer = function(width, height, type) {
     this.type = null;
 };
 
-ContentLayer.prototype.getElement = function(x, y) {
+ContentLayer.prototype.getEntity = function(x, y) {
     throw new Error('AbstractError: ContentLayer is an abstract object');
 };
 
-ContentLayer.prototype.setElement = function(x, y, element) {
+ContentLayer.prototype.setEntity = function(x, y, entity) {
     throw new Error('AbstractError: ContentLayer is an abstract object');
 };
 
@@ -20,12 +20,12 @@ ContentLayer.prototype.isOutOfBounds = function(x, y) {
     return x < 0 || x >= this.width || y < 0 || y >= this.height;
 };
 
-ContentLayer.prototype.isValidType = function(element) {
-    if (this.type === null || element === null) {
+ContentLayer.prototype.isValidType = function(entity) {
+    if (this.type === null || entity === null) {
         return true;
     }
 
-    return element instanceof this.type;
+    return entity instanceof this.type;
 };
 
 module.exports = ContentLayer;

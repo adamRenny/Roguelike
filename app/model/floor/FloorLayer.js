@@ -1,5 +1,5 @@
 var util = require('util');
-var TypeControl = require('../util/TypeControl');
+var TypeControl = require('../../util/TypeControl');
 var ContentLayer = require('./ContentLayer');
 
 var FloorLayer = function(width, height, type) {

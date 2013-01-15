@@ -1,4 +1,4 @@
-var Floor = require('../model/Floor');
+var Floor = require('../model/floor/Floor');
 
 var CLIView = function(floor) {
     if (!(floor instanceof Floor) || floor === undefined) {

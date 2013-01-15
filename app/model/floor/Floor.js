@@ -1,9 +1,9 @@
 var FloorLayer = require('./FloorLayer');
 var EntityLayer = require('./EntityLayer');
-var RandomGenerator = require('../controller/floor-generator/RandomGenerator');
-var Position = require('./Position');
+var RandomGenerator = require('../../controller/floor-generator/RandomGenerator');
+var Position = require('../Position');
 var FloorTile = require('./FloorTile');
-var Entity = require('./entity/Entity');
+var Entity = require('../entity/Entity');
 
 var FloorSizes = {
     tiny: 40,

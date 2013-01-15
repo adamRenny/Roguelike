@@ -1,6 +1,6 @@
 var util = require('util');
-var Dictionary = require('../../lib/Dictionary');
-var TypeControl = require('../util/TypeControl');
+var Dictionary = require('../../../lib/Dictionary');
+var TypeControl = require('../../util/TypeControl');
 var ContentLayer = require('./ContentLayer');
 
 var _getHashKey = function(x, y) {

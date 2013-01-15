@@ -1,4 +1,4 @@
-var Floor = require('../model/Floor');
+var Floor = require('../model/floor/Floor');
 var InputHandler = require('./InputHandler');
 var Entity = require('../model/entity/Entity');
 var CommandMap = require('../model/CommandMap');
