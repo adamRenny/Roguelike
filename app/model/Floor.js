@@ -1,9 +1,9 @@
 var FloorLayer = require('./FloorLayer');
 var EntityLayer = require('./EntityLayer');
 var RandomGenerator = require('../controller/floor-generator/RandomGenerator');
-var FloorPosition = require('./FloorPosition');
+var Position = require('./Position');
 var FloorTile = require('./FloorTile');
-var Entity = require('./Entity');
+var Entity = require('./entity/Entity');
 
 var FloorSizes = {
     tiny: 40,
@@ -52,7 +52,7 @@ Floor.prototype.getStartPosition = function() {
             y = Math.floor(Math.random() * this.height);
 
             if (this.isPositionValid(x, y)) {
-                this.startPosition = new FloorPosition(x, y);
+                this.startPosition = new Position(x, y);
                 hasFoundStart = true;
             }
         }
@@ -72,7 +72,7 @@ Floor.prototype.populateFloor = function() {
     for (; x < width; x++) {
         for (; y < height; y++) {
             tileType = RandomGenerator.getSymbolForPosition(x, y);
-            tileLayer.setElement(new FloorTile(tileType, 0), x, y);
+            tileLayer.setEntity(new FloorTile(tileType, 0), x, y);
         }
         y = 0;
     }
@@ -97,7 +97,7 @@ Floor.prototype.getTileAtPosition = function(x, y) {
         );
     }
 
-    return this.tileLayer.getElement(x, y);
+    return this.tileLayer.getEntity(x, y);
 };
 
 Floor.prototype.isOutOfBounds = function(x, y) {
@@ -109,7 +109,7 @@ Floor.prototype.isPositionVacant = function(x, y) {
         return false;
     }
 
-    return !this.entityLayer.hasElement(x, y);
+    return !this.entityLayer.hasEntity(x, y);
 };
 
 Floor.prototype.isPositionValid = function(x, y) {
@@ -123,14 +123,21 @@ Floor.prototype.isPositionValid = function(x, y) {
 };
 
 Floor.prototype.placeEntity = function(entity, x, y) {
-    entity.setPosition(x, y);
-    this.entityLayer.setElement(x, y, entity);
+    if (!entity.hasComponentType('spatial')) {
+        throw new TypeError('entity must have a spatial component');
+    }
+    var spatial = entity.getComponent('spatial');
+    spatial.x = x;
+    spatial.y = y;
+    this.entityLayer.setEntity(x, y, entity);
 };
 
 Floor.prototype.moveEntityToPosition = function(entity, x, y) {
-    this.entityLayer.setElement(entity.position.x, entity.position.y, null);
-    entity.setPosition(x, y);
-    this.entityLayer.setElement(x, y, entity);
+    var spatial = entity.getComponent('spatial');
+    this.entityLayer.setEntity(spatial.x, spatial.y, null);
+    spatial.x = x;
+    spatial.y = y;
+    this.entityLayer.setEntity(x, y, entity);
 };
 
 Floor.prototype.toString = function() {
@@ -155,7 +162,7 @@ Floor.prototype.toString = function() {
             tile = this.getTileAtPosition(x, y);
 
             if (this.isPositionValid(x, y) && !this.isPositionVacant(x, y)) {
-                entity = this.entityLayer.getElement(x, y);
+                entity = this.entityLayer.getEntity(x, y);
             }
 
             if (x === width - 1) {

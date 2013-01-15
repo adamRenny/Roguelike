@@ -1,6 +1,6 @@
 var Floor = require('../model/Floor');
 var InputHandler = require('./InputHandler');
-var Entity = require('../model/Entity');
+var Entity = require('../model/entity/Entity');
 var CommandMap = require('../model/CommandMap');
 
 var TurnController = function(floor, player, inputHandler) {
@@ -63,8 +63,9 @@ TurnController.prototype.destroy = function() {
 
 TurnController.prototype.onPlayerAction = function(playerAction) {
     var player = this.player;
-    var x = player.position.x;
-    var y = player.position.y;
+    var spatial = player.getComponent('spatial');
+    var x = spatial.x;
+    var y = spatial.y;
     var shouldMove = true;
 
     switch (playerAction) {

@@ -1,5 +1,5 @@
 var Floor = require('../model/Floor');
-var Entity = require('../model/Entity');
+var EntityBuilder = require('../model/entity/EntityBuilder');
 
 var FloorBuilder = function() {
     this.init();
@@ -22,7 +22,7 @@ FloorBuilder.prototype.createChildren = function() {
 };
 
 FloorBuilder.prototype.createPlayer = function() {
-    var player = this.player = new Entity('@');
+    var player = this.player = EntityBuilder.createPlayer();
     var startPosition = this.floor.getStartPosition();
     this.floor.placeEntity(player, startPosition.x, startPosition.y);
 

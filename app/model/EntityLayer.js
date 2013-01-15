@@ -31,7 +31,7 @@ EntityLayer.prototype.init = function(width, height, type) {
     return this;
 };
 
-EntityLayer.prototype.hasElement = function(x, y) {
+EntityLayer.prototype.hasEntity = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -48,7 +48,7 @@ EntityLayer.prototype.hasElement = function(x, y) {
     return this.content.hasKey(key);
 };
 
-EntityLayer.prototype.getElement = function(x, y) {
+EntityLayer.prototype.getEntity = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -65,7 +65,7 @@ EntityLayer.prototype.getElement = function(x, y) {
     return this.content.getValueForKey(key);
 };
 
-EntityLayer.prototype.setElement = function(x, y, element) {
+EntityLayer.prototype.setEntity = function(x, y, entity) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -77,8 +77,8 @@ EntityLayer.prototype.setElement = function(x, y, element) {
         throw new Error('BoundsError: x and y must be within the layer size');
     }
 
-    if (!this.isValidType(element)) {
-        throw new Error('TypeError: element must be of proper type');
+    if (!this.isValidType(entity)) {
+        throw new Error('TypeError: entity must be of proper type');
     }
 
     var key = _getHashKey(x, y);
@@ -87,8 +87,8 @@ EntityLayer.prototype.setElement = function(x, y, element) {
         this.content.removeKeyValueByKey(key);
     }
 
-    if (element !== null) {
-        this.content.addKeyValue(key, element);
+    if (entity !== null) {
+        this.content.addKeyValue(key, entity);
     }
 
     return this;

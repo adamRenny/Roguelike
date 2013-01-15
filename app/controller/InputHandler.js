@@ -49,8 +49,8 @@ InputHandler.prototype.linkToStream = function() {
 };
 
 InputHandler.prototype.unlinkFromStream = function() {
-    console.log('Unable to unlink from stream due to lack of `off` interface method');
 
+    this.stream.removeListener('data', this.onDataStreamHandler);
     this.stream.pause();
 
     return this;

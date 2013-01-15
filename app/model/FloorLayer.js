@@ -44,7 +44,7 @@ FloorLayer.prototype.generateLayer = function() {
     return this;
 };
 
-FloorLayer.prototype.hasElement = function(x, y) {
+FloorLayer.prototype.hasEntity = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -59,7 +59,7 @@ FloorLayer.prototype.hasElement = function(x, y) {
     return true;
 };
 
-FloorLayer.prototype.getElement = function(x, y) {
+FloorLayer.prototype.getEntity = function(x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -74,7 +74,7 @@ FloorLayer.prototype.getElement = function(x, y) {
     return this.content[x][y];
 };
 
-FloorLayer.prototype.setElement = function(element, x, y) {
+FloorLayer.prototype.setEntity = function(entity, x, y) {
     x = TypeControl.toNumberFromString(x);
     y = TypeControl.toNumberFromString(y);
 
@@ -86,11 +86,11 @@ FloorLayer.prototype.setElement = function(element, x, y) {
         throw new Error('BoundsError: x and y must be within the layer size');
     }
 
-    if (!this.isValidType(element)) {
-        throw new Error('TypeError: element must be of proper type');
+    if (!this.isValidType(entity)) {
+        throw new Error('TypeError: entity must be of proper type');
     }
 
-    this.content[x][y] = element;
+    this.content[x][y] = entity;
 
     return this;
 };
